@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import me.nentify.Protect.Protect;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -34,5 +35,7 @@ public class ClaimManager {
         ProtectedRegion region = new ProtectedCuboidRegion(id, min, max);
         region.getOwners().addPlayer(playerName);
         regionManager.addRegion(region);
+
+        plugin.playerManager().getPlayerEntry(playerName).setPreviousLocation(null);
     }
 }
