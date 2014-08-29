@@ -6,7 +6,6 @@ import com.sk89q.worldguard.internal.PermissionModel;
 import me.nentify.Protect.listeners.PlayerListener;
 import me.nentify.Protect.managers.ClaimManager;
 import me.nentify.Protect.managers.CommandManager;
-import me.nentify.Protect.managers.PermissionsManager;
 import me.nentify.Protect.managers.PlayerManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -23,7 +22,6 @@ public class Protect extends JavaPlugin {
     private static Logger logger = Logger.getLogger("Minecraft");
     private CommandManager commandManager;
     private ClaimManager claimManager;
-    private PermissionsManager permissionsManager;
     private PlayerManager playerManager;
     private PlayerListener playerListener;
 
@@ -52,7 +50,6 @@ public class Protect extends JavaPlugin {
 
         commandManager = new CommandManager();
         claimManager = new ClaimManager();
-        permissionsManager = new PermissionsManager();
         playerManager = new PlayerManager();
 
         playerListener = new PlayerListener();
@@ -98,10 +95,6 @@ public class Protect extends JavaPlugin {
 
     public ClaimManager getClaimManager() {
         return claimManager;
-    }
-
-    public PermissionsManager getPermissionsManager() {
-        return permissionsManager;
     }
 
     public PlayerManager getPlayerManager() {
