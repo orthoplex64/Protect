@@ -1,4 +1,7 @@
-package me.nentify.Protect;
+package me.nentify.Protect.managers;
+
+import me.nentify.Protect.Protect;
+import me.nentify.Protect.entries.PlayerEntry;
 
 import java.util.HashMap;
 

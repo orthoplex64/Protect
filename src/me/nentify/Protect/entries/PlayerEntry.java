@@ -1,4 +1,4 @@
-package me.nentify.Protect;
+package me.nentify.Protect.entries;
 
 import org.bukkit.Location;
 

@@ -1,9 +1,9 @@
 package me.nentify.Protect;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import me.nentify.Protect.listeners.PlayerListener;
+import me.nentify.Protect.managers.ClaimManager;
+import me.nentify.Protect.managers.PlayerManager;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -13,12 +13,11 @@ import java.util.logging.Logger;
 public class Protect extends JavaPlugin {
     private static Protect instance;
     private static Logger logger = Logger.getLogger("Minecraft");
+    private ClaimManager claimManager;
     private PlayerManager playerManager;
     private PlayerListener playerListener;
 
     Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
-
-    public DataStore dataStore;
 
     public static Protect getInstance() {
         return instance;
@@ -37,6 +36,7 @@ public class Protect extends JavaPlugin {
 
         log("Protection loaded");
 
+        claimManager = new ClaimManager();
         playerManager = new PlayerManager();
 
         playerListener = new PlayerListener();
@@ -56,6 +56,10 @@ public class Protect extends JavaPlugin {
         // Empty
     }
 
+    public ClaimManager claimManager() {
+        return claimManager;
+    }
+
     public PlayerManager playerManager() {
         return playerManager;
     }
@@ -64,34 +68,3 @@ public class Protect extends JavaPlugin {
         return playerListener;
     }
 }
-
-
-
-/* IGNOREEEE
-        if (heldItem.getType() == FEATHER) {
-            player.sendMessage("Holding feather");
-            if (event.getClickedBlock().getType() != Material.AIR) {
-                if (x1 == 0) {
-                    x1 = event.getClickedBlock().getX();
-                    z1 = event.getClickedBlock().getZ();
-                    player.sendMessage("pos 1 set");
-                } else if (x2 == 0) {
-                    x2 = event.getClickedBlock().getX();
-                    z2 = event.getClickedBlock().getZ();
-                    player.sendMessage("pos 2 set");
-
-                    int worldHeight = world.getMaxHeight() - 1;
-                    BlockVector min = new Vector(x1, 0.0D, z1).toBlockVector();
-                    BlockVector max = new Vector(x2, worldHeight, z2).toBlockVector();
-
-                    String xAsStr = Double.toString(x1);
-                    String zAsStr = Double.toString(z1);
-
-                    String id = xAsStr.substring(0, xAsStr.indexOf(".")) + "x" + zAsStr.substring(0, zAsStr.indexOf("."));
-
-                    ProtectedRegion region = new ProtectedCuboidRegion(id, min, max);
-                    region.getOwners().addPlayer(player.getName());
-                    regionManager.addRegion(region);
-                }
-            }
-        }*/
