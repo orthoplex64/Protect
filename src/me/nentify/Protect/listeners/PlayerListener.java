@@ -41,7 +41,7 @@ public class PlayerListener implements Listener {
         ItemStack heldItem = player.getItemInHand();
 
         if (heldItem.getType() == FEATHER) {
-            PlayerEntry playerEntry = plugin.playerManager().getPlayerEntry(playerName);
+            PlayerEntry playerEntry = plugin.getPlayerManager().getPlayerEntry(playerName);
             Location previousLocation = playerEntry.getPreviousLocation();
 
             if (previousLocation == null) {
@@ -49,7 +49,7 @@ public class PlayerListener implements Listener {
                 player.sendMessage(ChatColor.GREEN + "Corner 1 set, right click the opposite corner of the area you wish to protect");
             } else {
                 Location currentLocation = event.getClickedBlock().getLocation();
-                plugin.claimManager().addClaim(world, previousLocation, currentLocation, playerName);
+                plugin.getClaimManager().addClaim(world, previousLocation, currentLocation, playerName);
                 player.sendMessage(ChatColor.GREEN + "Your area has been claimed, and is now protected from other users!");
             }
         }

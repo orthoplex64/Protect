@@ -1,23 +1,36 @@
 package me.nentify.Protect;
 
+import com.sk89q.worldguard.bukkit.RegionContainer;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.internal.PermissionModel;
 import me.nentify.Protect.listeners.PlayerListener;
 import me.nentify.Protect.managers.ClaimManager;
+import me.nentify.Protect.managers.CommandManager;
+import me.nentify.Protect.managers.PermissionsManager;
 import me.nentify.Protect.managers.PlayerManager;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.security.Permission;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Protect extends JavaPlugin {
     private static Protect instance;
     private static Logger logger = Logger.getLogger("Minecraft");
+    private CommandManager commandManager;
     private ClaimManager claimManager;
+    private PermissionsManager permissionsManager;
     private PlayerManager playerManager;
     private PlayerListener playerListener;
 
-    Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+    public static net.milkbowl.vault.permission.Permission permission = null;
+    private static Economy economy = null;
+
+    private WorldGuardPlugin worldGuard;
 
     public static Protect getInstance() {
         return instance;
@@ -33,38 +46,73 @@ public class Protect extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
+        worldGuard = ((WorldGuardPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldGuard"));
 
         log("Protection loaded");
 
+        commandManager = new CommandManager();
         claimManager = new ClaimManager();
+        permissionsManager = new PermissionsManager();
         playerManager = new PlayerManager();
 
         playerListener = new PlayerListener();
 
-        registerEvents();
+        setupEconomy();
+        setupPermissions();
 
-        if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
-            log("Please install WorldGuard");
-        }
+        registerEvents();
+        registerCommands();
     }
 
     public void registerEvents() {
         getServer().getPluginManager().registerEvents(playerListener, this);
     }
 
+    public void registerCommands() {
+        getCommand("claim").setExecutor(getCommandManager());
+    }
+
+    private boolean setupPermissions() {
+        RegisteredServiceProvider<net.milkbowl.vault.permission.Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null) {
+            permission = permissionProvider.getProvider();
+        }
+        return (permission != null);
+    }
+
+    private boolean setupEconomy() {
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
+        return (economy != null);
+    }
+
     public void onDisable() {
         // Empty
     }
 
-    public ClaimManager claimManager() {
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    public ClaimManager getClaimManager() {
         return claimManager;
     }
 
-    public PlayerManager playerManager() {
+    public PermissionsManager getPermissionsManager() {
+        return permissionsManager;
+    }
+
+    public PlayerManager getPlayerManager() {
         return playerManager;
     }
 
     public PlayerListener getPlayerListener() {
         return playerListener;
+    }
+
+    public WorldGuardPlugin getWorldGuard() {
+        return worldGuard;
     }
 }

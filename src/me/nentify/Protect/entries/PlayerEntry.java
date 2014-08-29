@@ -21,7 +21,7 @@ public class PlayerEntry {
     }
 
     public Location getPreviousLocation() {
-        return previousLocation;
+      return previousLocation;
     }
 
     public void setPreviousLocation(Location previousLocation) {

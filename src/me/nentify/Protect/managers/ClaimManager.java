@@ -14,8 +14,6 @@ import org.bukkit.World;
 
 public class ClaimManager {
 
-    public WorldGuardPlugin worldGuard = ((WorldGuardPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldGuard"));
-
     private Protect plugin;
 
     public ClaimManager() {
@@ -23,7 +21,7 @@ public class ClaimManager {
     }
 
     public void addClaim(World world, Location loc1, Location loc2, String playerName) {
-        RegionManager regionManager = this.worldGuard.getRegionManager(world);
+        RegionManager regionManager = plugin.getWorldGuard().getRegionManager(world);
 
         int worldHeight = plugin.getServer().getWorlds().get(0).getMaxHeight() -1;
 
@@ -36,6 +34,6 @@ public class ClaimManager {
         region.getOwners().addPlayer(playerName);
         regionManager.addRegion(region);
 
-        plugin.playerManager().getPlayerEntry(playerName).setPreviousLocation(null);
+        plugin.getPlayerManager().getPlayerEntry(playerName).setPreviousLocation(null);
     }
 }
