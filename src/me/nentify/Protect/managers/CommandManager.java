@@ -46,9 +46,10 @@ public class CommandManager implements CommandExecutor {
                     for (Iterator<ProtectedRegion> it = set.iterator(); it.hasNext();) {
                         ProtectedRegion pr = it.next();
                         if (pr.getOwners().getPlayers().contains(player.getName().toLowerCase())) {
-                             player.sendMessage(player.getName().toLowerCase());
-                             ownedRegions.add(pr);
-                             player.sendMessage(pr.getId());
+                            player.sendMessage(player.getName().toLowerCase());
+                            ownedRegions.add(pr);
+                        } else {
+                            player.sendMessage(ChatColor.RED + "You do not have permission to delete this claim");
                         }
                     }
 
@@ -56,8 +57,10 @@ public class CommandManager implements CommandExecutor {
                         ProtectedRegion ownedRegion = ownedRegions.get(0);
                         plugin.getWorldGuard().getRegionManager(world).removeRegion(ownedRegion.getId());
                         player.sendMessage(ChatColor.GREEN + "Your claim " + ownedRegion.getId() + " has been removed");
+                    } else if (ownedRegions.size() == 0) {
+                        player.sendMessage(ChatColor.RED + "There are no claims here");
                     } else {
-                        player.sendMessage(String.valueOf(ownedRegions.size()));
+                        player.sendMessage(ChatColor.RED + "There are too many claims to DEAL WITH ATM!!!!");
                     }
 
                     return true;
