@@ -40,16 +40,15 @@ public class CommandManager implements CommandExecutor {
 
                 if (cmd.equalsIgnoreCase("remove") && (player.hasPermission("protect.remove") || player.isOp())) {
                     ApplicableRegionSet set = plugin.getWorldGuard().getRegionContainer().createQuery().getApplicableRegions(player.getLocation());
-                    player.sendMessage("hi");
 
                     List<ProtectedRegion> ownedRegions = new ArrayList<ProtectedRegion>();
                     for (Iterator<ProtectedRegion> it = set.iterator(); it.hasNext();) {
                         ProtectedRegion pr = it.next();
                         if (pr.getOwners().getPlayers().contains(player.getName().toLowerCase())) {
-                            player.sendMessage(player.getName().toLowerCase());
                             ownedRegions.add(pr);
                         } else {
                             player.sendMessage(ChatColor.RED + "You do not have permission to delete this claim");
+                            return true;
                         }
                     }
 
