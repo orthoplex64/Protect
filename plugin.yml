@@ -1,0 +1,7 @@
+name: Protect
+main: me.nentify.Protect.Protect
+version: ${project.version}
+commands:
+    claim:
+        usage: /<command>
+        description: Start a claim
