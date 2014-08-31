@@ -1,6 +1,7 @@
 package me.nentify.Protect.listeners;
 
 import me.nentify.Protect.Protect;
+import me.nentify.Protect.entries.ClaimEntry;
 import me.nentify.Protect.entries.PlayerEntry;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -49,8 +50,11 @@ public class PlayerListener implements Listener {
                 player.sendMessage(ChatColor.GREEN + "Corner 1 set, right click the opposite corner of the area you wish to protect");
             } else {
                 Location currentLocation = event.getClickedBlock().getLocation();
-                plugin.getClaimManager().addClaim(world, previousLocation, currentLocation, playerName);
-                player.sendMessage(ChatColor.GREEN + "Your area has been claimed, and is now protected from other users!");
+                if (plugin.getClaimManager().addClaim(new ClaimEntry(playerName, previousLocation, currentLocation))) {
+                    player.sendMessage(ChatColor.GREEN + "Your area has been claimed, and is now protected from other users!");
+                } else {
+                    player.sendMessage(ChatColor.RED + "Claim creation failed");
+                }
             }
         }
     }
