@@ -36,10 +36,10 @@ public class CommandManager implements CommandExecutor {
                 
                 if (cmd.equalsIgnoreCase("remove")) {
                     if (checkPerm(sender, "protect.remove"))
-                        return false;
+                        return true;
                     if (player == null) {
                         sender.sendMessage("You must be a player to use that command");
-                        return false;
+                        return true;
                     }
                     
                     WorldGuardPlugin worldGuard = plugin.getWorldGuard();
@@ -52,7 +52,7 @@ public class CommandManager implements CommandExecutor {
                             ownedRegions.add(pr);
                         } else {
                             player.sendMessage(ChatColor.RED + "You do not have permission to delete this claim");
-                            return false;
+                            return true;
                         }
                     }
                     
@@ -71,7 +71,7 @@ public class CommandManager implements CommandExecutor {
             }
             
             player.sendMessage(ChatColor.GREEN + "Protection by Nentify");
-            return false;
+            return true;
         }
         
         return false;
