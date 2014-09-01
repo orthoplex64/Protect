@@ -1,15 +1,11 @@
 package me.nentify.Protect;
 
-import com.sk89q.worldguard.bukkit.RegionContainer;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.internal.PermissionModel;
 import me.nentify.Protect.listeners.PlayerListener;
 import me.nentify.Protect.managers.ClaimManager;
 import me.nentify.Protect.managers.CommandManager;
 import me.nentify.Protect.managers.PlayerManager;
+import me.nentify.Protect.managers.WorldGuardManager;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,11 +20,10 @@ public class Protect extends JavaPlugin {
     private ClaimManager claimManager;
     private PlayerManager playerManager;
     private PlayerListener playerListener;
+    private WorldGuardManager worldGuardManager;
 
     public static net.milkbowl.vault.permission.Permission permission = null;
     private static Economy economy = null;
-
-    private WorldGuardPlugin worldGuard;
 
     public static Protect getInstance() {
         return instance;
@@ -44,13 +39,13 @@ public class Protect extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
-        worldGuard = ((WorldGuardPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldGuard"));
 
-        log("Protection loaded");
+        log("Protection enabled");
 
         commandManager = new CommandManager();
         claimManager = new ClaimManager();
         playerManager = new PlayerManager();
+        worldGuardManager = new WorldGuardManager();
 
         playerListener = new PlayerListener();
 
@@ -86,7 +81,7 @@ public class Protect extends JavaPlugin {
     }
 
     public void onDisable() {
-        // Empty
+        log("Protecion disabled");
     }
 
     public CommandManager getCommandManager() {
@@ -105,7 +100,7 @@ public class Protect extends JavaPlugin {
         return playerListener;
     }
 
-    public WorldGuardPlugin getWorldGuard() {
-        return worldGuard;
+    public WorldGuardManager getWorldGuardManager() {
+        return worldGuardManager;
     }
 }

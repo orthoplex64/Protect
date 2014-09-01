@@ -24,12 +24,12 @@ public class ClaimManager {
         this.plugin = Protect.getInstance();
     }
 
-    public boolean addClaim(ClaimEntry newClaim) {
+    public void addClaim(ClaimEntry newClaim) {
         if (newClaim.getMin().getWorld() != newClaim.getMax().getWorld()) {
-            return false;
+            return;
         }
 
-        RegionManager mgr = plugin.getWorldGuard().getRegionManager(newClaim.getMin().getWorld());
+        RegionManager mgr = plugin.getWorldGuardManager().getWorldGuardPlugin().getRegionManager(newClaim.getMin().getWorld());
 
         int worldHeight = plugin.getServer().getWorlds().get(0).getMaxHeight() -1;
 
@@ -42,17 +42,34 @@ public class ClaimManager {
         region.getOwners().addPlayer(newClaim.getOwnerName());
 
         Player player = Bukkit.getServer().getPlayer(newClaim.getOwnerName());
+        LocalPlayer localPlayer = plugin.getWorldGuardManager().getWorldGuardPlugin().wrapPlayer(player);
 
         if (mgr.getApplicableRegions(region).size() != 0) {
             player.sendMessage("Overlaps " + "lel");
             plugin.getPlayerManager().getPlayerEntry(newClaim.getOwnerName()).setPreviousLocation(null);
-            return false;
+            return;
         }
 
+        int currentRegionCount = mgr.getRegionCountOfPlayer(localPlayer);
+
+        if (currentRegionCount >= 2) {
+            player.sendMessage(ChatColor.RED + "You already have " + String.valueOf(currentRegionCount) + " with a max of 2");
+            return;
+        }
+
+        if (region.volume() / 255 > 30 * 30) {
+            player.sendMessage(ChatColor.RED + "Area is too big (max = " + String.valueOf(30 * 30) + ") - Please re-select position #2");
+            return;
+        }
+
+        double test = region.getMaximumPoint().getX() - region.getMinimumPoint().getX();
+        player.sendMessage(ChatColor.LIGHT_PURPLE + String.valueOf(test));
+
         mgr.addRegion(region);
+        player.sendMessage(ChatColor.GREEN + "Your area has been claimed, and is now protected from other users!");
 
         plugin.getPlayerManager().getPlayerEntry(newClaim.getOwnerName()).setPreviousLocation(null);
 
-        return true;
+        return;
     }
 }

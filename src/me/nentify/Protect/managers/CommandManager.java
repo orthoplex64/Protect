@@ -39,10 +39,10 @@ public class CommandManager implements CommandExecutor {
                 args = Helper.removeFirst(args);
 
                 if (cmd.equalsIgnoreCase("remove") && (player.hasPermission("protect.remove") || player.isOp())) {
-                    ApplicableRegionSet set = plugin.getWorldGuard().getRegionContainer().createQuery().getApplicableRegions(player.getLocation());
+                    ApplicableRegionSet regions = plugin.getWorldGuardManager().getWorldGuardPlugin().getRegionContainer().createQuery().getApplicableRegions(player.getLocation());
 
                     List<ProtectedRegion> ownedRegions = new ArrayList<ProtectedRegion>();
-                    for (Iterator<ProtectedRegion> it = set.iterator(); it.hasNext();) {
+                    for (Iterator<ProtectedRegion> it = regions.iterator(); it.hasNext();) {
                         ProtectedRegion pr = it.next();
                         if (pr.getOwners().getPlayers().contains(player.getName().toLowerCase())) {
                             ownedRegions.add(pr);
@@ -54,7 +54,7 @@ public class CommandManager implements CommandExecutor {
 
                     if (ownedRegions.size() == 1) {
                         ProtectedRegion ownedRegion = ownedRegions.get(0);
-                        plugin.getWorldGuard().getRegionManager(world).removeRegion(ownedRegion.getId());
+                        plugin.getWorldGuardManager().getWorldGuardPlugin().getRegionManager(world).removeRegion(ownedRegion.getId());
                         player.sendMessage(ChatColor.GREEN + "Your claim " + ownedRegion.getId() + " has been removed");
                     } else if (ownedRegions.size() == 0) {
                         player.sendMessage(ChatColor.RED + "There are no claims here");
