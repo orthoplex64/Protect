@@ -5,7 +5,6 @@ import me.nentify.Protect.entries.ClaimEntry;
 import me.nentify.Protect.entries.PlayerEntry;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -28,8 +27,10 @@ public class PlayerListener implements Listener {
     public void onItemHeldEvent(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
+        int currentSlot = event.getNewSlot();
+        ItemStack currentItemHeld = inventory.getItem(currentSlot);
         
-        if (inventory.getItemInHand().getType() == FEATHER) {
+        if (currentItemHeld.getType() == FEATHER) {
             player.sendMessage(ChatColor.GREEN + "Right click the first corner of your area you wish to protect");
         }
     }
@@ -38,7 +39,6 @@ public class PlayerListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         String playerName = player.getName();
-        World world = player.getWorld();
         ItemStack heldItem = player.getItemInHand();
         
         if (heldItem.getType() == FEATHER) {
@@ -50,9 +50,10 @@ public class PlayerListener implements Listener {
                 playerEntry.setPreviousLocation(currentLocation);
                 player.sendMessage(ChatColor.GREEN + "Corner 1 set, right click the opposite corner of the area you wish to protect");
             } else {
-                if (plugin.getClaimManager().addClaim(new ClaimEntry(playerName, previousLocation, currentLocation))) {
+                try {
+                    plugin.getClaimManager().addClaim(new ClaimEntry(playerName, previousLocation, currentLocation));
                     player.sendMessage(ChatColor.GREEN + "Your area has been claimed, and is now protected from other users!");
-                } else {
+                } catch (Throwable thr) {
                     player.sendMessage(ChatColor.RED + "Claim creation failed");
                 }
             }

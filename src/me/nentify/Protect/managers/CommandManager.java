@@ -42,7 +42,7 @@ public class CommandManager implements CommandExecutor {
                         return true;
                     }
                     
-                    WorldGuardPlugin worldGuard = plugin.getWorldGuard();
+                    WorldGuardPlugin worldGuard = plugin.getWorldGuardManager().getWorldGuardPlugin();
                     ApplicableRegionSet set = worldGuard.getRegionContainer().createQuery().getApplicableRegions(player.getLocation());
                     
                     List<ProtectedRegion> ownedRegions = new ArrayList<ProtectedRegion>();

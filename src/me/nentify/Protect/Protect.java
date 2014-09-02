@@ -1,12 +1,10 @@
 package me.nentify.Protect;
 
-import com.sk89q.worldguard.bukkit.RegionContainer;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.internal.PermissionModel;
 import me.nentify.Protect.listeners.PlayerListener;
 import me.nentify.Protect.managers.ClaimManager;
 import me.nentify.Protect.managers.CommandManager;
 import me.nentify.Protect.managers.PlayerManager;
+import me.nentify.Protect.managers.WorldGuardManager;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -23,12 +21,11 @@ public class Protect extends JavaPlugin {
     private CommandManager commandManager;
     private ClaimManager claimManager;
     private PlayerManager playerManager;
+    private WorldGuardManager worldGuardManager;
     private PlayerListener playerListener;
     
-    public static Permission permission = null;
-    private static Economy economy = null;
-    
-    private WorldGuardPlugin worldGuard;
+    public static Permission permission;
+    private static Economy economy;
     
     public static Protect getInstance() {
         return instance;
@@ -44,13 +41,13 @@ public class Protect extends JavaPlugin {
     
     public void onEnable() {
         instance = this;
-        worldGuard = ((WorldGuardPlugin) Bukkit.getServer().getPluginManager().getPlugin("WorldGuard"));
         
-        log("Protection loaded");
+        log("Protection enabled");
         
         commandManager = new CommandManager();
         claimManager = new ClaimManager();
         playerManager = new PlayerManager();
+        worldGuardManager = new WorldGuardManager();
         
         playerListener = new PlayerListener();
         
@@ -86,7 +83,7 @@ public class Protect extends JavaPlugin {
     }
     
     public void onDisable() {
-        // Empty
+        log("Protecion disabled");
     }
     
     public CommandManager getCommandManager() {
@@ -100,12 +97,11 @@ public class Protect extends JavaPlugin {
     public PlayerManager getPlayerManager() {
         return playerManager;
     }
+    public WorldGuardManager getWorldGuardManager() {
+        return worldGuardManager;
+    }
     
     public PlayerListener getPlayerListener() {
         return playerListener;
-    }
-    
-    public WorldGuardPlugin getWorldGuard() {
-        return worldGuard;
     }
 }
