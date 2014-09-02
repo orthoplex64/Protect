@@ -2,7 +2,11 @@ name: Protect
 main: me.nentify.Protect.Protect
 version: ${project.version}
 depend: [Vault]
+authors: [Nentify, orthoplex64]
 commands:
     claim:
         usage: /<command>
         description: Claim command
+permissions:
+    protect.remove:
+        default: op
